@@ -1,0 +1,33 @@
+<p-toolbar
+  #toolbarRef
+  styleClass="custom-toolbar fixed w-12"
+>
+  <div class="p-toolbar-group-start">
+    <p-button
+      icon="pi pi-bars"
+      (onClick)="onMenuToggle()"
+      styleClass="p-button-text"
+    ></p-button>
+    <h2 class="ml-2 text-xl">
+      <a
+        routerLink="/"
+        routerLinkActive="active"
+        ariaCurrentWhenActive="page"
+      > <i
+          class="pi pi-home"
+          style="font-size: 20px"
+        ></i>
+      </a>
+      @let routeTitle = titleService.getTitle();
+      @if(routeTitle) {
+      / <span>{{ routeTitle }}</span>
+      }
+    </h2>
+  </div>
+  <div class="p-toolbar-group-end">
+    <p-button
+      icon="pi pi-user"
+      styleClass="p-button-text"
+    ></p-button>
+  </div>
+</p-toolbar>

@@ -1,0 +1,134 @@
+<div
+    *ngIf="!quizCompleted"
+    class="p-4"
+>
+    <div class="flex flex-column align-items-center">
+        <h2 class="text-4xl mb-4">Choose Correct Answer</h2>
+
+        <div class="surface-200 border-round p-4 mb-4 w-full max-w-30rem">
+            <h1 class="text-3xl m-0 text-center">{{ currentWord?.english }}</h1>
+        </div>
+
+        <div class="grid grid-nogutter w-full">
+            <div
+                *ngFor="let option of currentWord?.options; let i = index"
+                class="col-4 p-2"
+            >
+                @let isCorrectAnswer = currentWord?.vietnamese === option; @let
+                isWrongAnswer = selectedAnswer === option && currentWord?.vietnamese
+                !== option;
+                <p-button
+                    [label]="option"
+                    [text]="
+              currentWord?.checked && (isCorrectAnswer || isWrongAnswer)
+                ? false
+                : true
+            "
+                    [raised]="true"
+                    [plain]="false"
+                    [severity]="
+              !currentWord?.checked
+                ? 'contrast'
+                : isCorrectAnswer
+                ? 'success'
+                : isWrongAnswer
+                ? 'warning'
+                : 'contrast'
+            "
+                    styleClass="w-full h-6rem"
+                    (onClick)="processQuizz(option)"
+                >
+                    <ng-template pTemplate="content">
+                        <span
+                            class="bg-primary border-circle text-white flex align-items-center justify-content-center mr-2"
+                            style="min-width: 24px; height: 24px;"
+                        >{{ i + 1 }}</span>
+                        {{ option }}
+                    </ng-template>
+                </p-button>
+            </div>
+        </div>
+    </div>
+    <div class="flex justify-content-end mt-5">
+        <p-button
+            outlined
+            (onClick)="skipQuestion()"
+            class="mr-2"
+        >
+            <b>Skip</b>
+            (<svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="20px"
+                viewBox="0 -960 960 960"
+                width="20px"
+                fill="#5f6368"
+            >
+                <path d="m560-240-56-58 142-142H160v-80h486L504-662l56-58 240 240-240 240Z" />
+            </svg>)
+        </p-button>
+        <p-button
+            outlined
+            (onClick)="stopQuiz()"
+        >
+            <b>Stop Quiz</b>
+            (<svg
+                xmlns="http://www.w3.org/2000/svg"
+                height="20px"
+                width="20px"
+                viewBox="0 -960 960 960"
+                fill="#5f6368"
+            >
+                <path d="M360-240 120-480l240-240 56 56-144 144h488v-160h80v240H272l144 144-56 56Z" />
+            </svg>)
+        </p-button>
+    </div>
+</div>
+
+<div *ngIf="quizCompleted">
+    <div class="flex justify-content-between align-items-center">
+        <div></div>
+        <div>
+            <h2 class="text-2xl">Quiz Results:</h2>
+            <p class="text-center">
+                Attempted:
+                {{ (words | filter : { key: 'checked', value: true }).length }}
+            </p>
+            <p class="text-center">
+                Passed:
+                {{
+                (
+                words
+                | filter : { key: 'checked', value: true }
+                | filter : { key: 'status', value: 'passed' }
+                ).length
+                }}
+            </p>
+            <p class="text-center">
+                Failed:
+                {{
+                (
+                words
+                | filter : { key: 'checked', value: true }
+                | filter : { key: 'status', value: 'failed' }
+                ).length
+                }}
+            </p>
+        </div>
+        <div>
+            <p-button
+                label="Continue Quiz"
+                outlined
+                (onClick)="retakeQuiz()"
+            >
+            </p-button>
+            <p-button
+                label="New Quiz"
+                outlined
+                (onClick)="newQuiz()"
+                class="ml-2"
+            >
+            </p-button>
+        </div>
+    </div>
+    <app-word-list [words]="words" />
+</div>
