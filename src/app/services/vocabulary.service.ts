@@ -20,17 +20,25 @@ export class VocabularyService {
       words = words.filter((word) => word.status === status);
     }
     words.forEach((w) => {
-      const vietnameseOptions = shuffleArray(words.map((w) => w.vietnamese));
+      const vietnameseWords = shuffleArray(words.map((w) => w.vietnamese));
       let options = [
-        vietnameseOptions[1],
-        vietnameseOptions[2],
-        vietnameseOptions[3],
+        vietnameseWords[1],
+        vietnameseWords[2],
+        vietnameseWords[3],
       ];
       if (!options.includes(w.vietnamese)) {
         options[0] = w.vietnamese;
         options = shuffleArray(options);
       }
       w.options = options;
+
+      const enWords = shuffleArray(words.map((w) => w.english));
+      let enOptions = [enWords[1], enWords[2], enWords[3]];
+      if (!enOptions.includes(w.english)) {
+        enOptions[0] = w.english;
+        enOptions = shuffleArray(enOptions);
+      }
+      w.enOptions = enOptions;
     });
     return of(words);
   }

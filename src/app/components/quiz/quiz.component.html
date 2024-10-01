@@ -1,22 +1,47 @@
 <div
-    *ngIf="!quizCompleted"
+    *ngIf="!selectedQuizMode"
+    class="flex flex-column align-items-center"
+>
+    <h2 class="text-4xl mb-4">Select Mode</h2>
+    <div>
+        <p-button
+            outlined
+            (onClick)="selectQuizMode(1)"
+            class="mr-2"
+        >
+            <b>En -> Vi</b>
+        </p-button>
+        <p-button
+            outlined
+            (onClick)="selectQuizMode(2)"
+            class="mr-2"
+        >
+            <b>Vi -> En</b>
+        </p-button>
+    </div>
+
+</div>
+<div
+    *ngIf="!quizCompleted && selectedQuizMode"
     class="p-4"
 >
     <div class="flex flex-column align-items-center">
         <h2 class="text-4xl mb-4">Choose Correct Answer</h2>
 
         <div class="surface-200 border-round p-4 mb-4 w-full max-w-30rem">
-            <h1 class="text-3xl m-0 text-center">{{ currentWord?.english }}</h1>
+            <h1 class="text-3xl m-0 text-center">{{ selectedQuizMode === 1 ? currentWord?.english :
+                currentWord?.vietnamese }}</h1>
         </div>
 
         <div class="grid grid-nogutter w-full">
             <div
-                *ngFor="let option of currentWord?.options; let i = index"
+                *ngFor="let option of (selectedQuizMode === 1 ? currentWord?.options : currentWord?.enOptions); let i = index"
                 class="col-4 p-2"
             >
-                @let isCorrectAnswer = currentWord?.vietnamese === option; @let
-                isWrongAnswer = selectedAnswer === option && currentWord?.vietnamese
-                !== option;
+                @let isCorrectAnswer = (selectedQuizMode === 1 ? currentWord?.vietnamese : currentWord?.english) ===
+                option;
+                @let isWrongAnswer = selectedAnswer === option && (selectedQuizMode === 1 ? currentWord?.vietnamese :
+                currentWord?.english) !== option;
                 <p-button
                     [label]="option"
                     [text]="

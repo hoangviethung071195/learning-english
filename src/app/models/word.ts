@@ -8,4 +8,5 @@ export interface Word {
   imageUrls?: string[];
   checked?: boolean;
   options?: string[];
+  enOptions?: string[];
 }

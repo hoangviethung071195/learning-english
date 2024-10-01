@@ -33,6 +33,7 @@ export class QuizComponent implements OnInit {
   selectedAnswer = '';
   quizType = '';
   quizCompleted = false;
+  selectedQuizMode: number | undefined;
 
   constructor(
     private route: ActivatedRoute,
@@ -48,6 +49,7 @@ export class QuizComponent implements OnInit {
 
   newQuiz() {
     this.quizCompleted = false;
+    this.selectedQuizMode = undefined;
     this.loadWords();
   }
 
@@ -85,8 +87,14 @@ export class QuizComponent implements OnInit {
     if (isSkipAnswer) {
       this.currentWord!.status = 'failed';
     } else {
-      const isCorrect = selectedAnswer === this.currentWord?.vietnamese;
+      const isCorrect =
+        selectedAnswer ===
+        (this.selectedQuizMode === 1
+          ? this.currentWord?.vietnamese
+          : this.currentWord?.english);
+      console.log('isCorrect ', isCorrect);
       const w = this.words.find((w) => w.id === this.currentWord?.id);
+      console.log('this.words.filter((w) => w.checked) ', this.words.filter((w) => w.checked));
       if (w) {
         if (isCorrect) {
           w.status = 'passed';
@@ -106,6 +114,10 @@ export class QuizComponent implements OnInit {
   skipQuestion() {
     this.checkAnswer('', true);
     this.nextWord();
+  }
+
+  selectQuizMode(mode: number) {
+    this.selectedQuizMode = mode;
   }
 
   @HostListener('window:keydown', ['$event'])
